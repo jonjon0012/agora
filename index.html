@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mensagem Romântica</title>
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(to top, #ffb6c1, #ffe4e1);
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // Inicializa o canvas
+    const canvas = document.getElementById("canvas");
+    const stage = new createjs.Stage(canvas);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // Texto romântico
+    const text = new createjs.Text(
+      "The longer I'm with you\nThe more I love you",
+      "bold 32px Arial",
+      "#ffffff"
+    );
+    text.textAlign = "center";
+    text.textBaseline = "middle";
+    text.x = w / 2;
+    text.y = h / 2;
+    stage.addChild(text);
+
+    // Função para criar corações animados
+    function createHeart() {
+      const size = 20 + Math.random() * 20;
+      const heart = new createjs.Text("❤️", `${size}px Arial`, "#ff0000");
+      heart.x = Math.random() * w;
+      heart.y = h + 30;
+      heart.alpha = 1;
+      stage.addChild(heart);
+
+      const drift = (Math.random() - 0.5) * 100;
+
+      createjs.Tween.get(heart)
+        .to({
+          y: -50,
+          x: heart.x + drift,
+          alpha: 0.0,
+          scaleX: 1.5,
+          scaleY: 1.5
+        }, 4000 + Math.random() * 2000, createjs.Ease.quadOut)
+        .call(() => stage.removeChild(heart));
+    }
+
+    // Disparar corações de tempos em tempos
+    setInterval(createHeart, 300);
+
+    // Atualizar o canvas constantemente
+    createjs.Ticker.framerate = 60;
+    createjs.Ticker.addEventListener("tick", stage);
+  </script>
+</body>
+</html>
